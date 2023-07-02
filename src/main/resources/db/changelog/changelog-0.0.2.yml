@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20230612-01
+      author: Orkhan
+      changes:
+        - createTable:
+            tableName: tasks
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: text
+              - column:
+                  name: description
+                  type: text
+              - column:
+                  name: status
+                  type: varchar(16)
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValue: now()
+              - column:
+                  name: expired_at
+                  type: timestamp
+            constraints:
+              - foreignKey:
+                  baseColumnNames: organization_id
+                  baseTableName: tasks
+                  referencedColumnNames: id
+                  referencedTableName: organizations
+
+
+
+
+
+            remarks: Tasks table
