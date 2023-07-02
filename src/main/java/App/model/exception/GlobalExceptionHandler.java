@@ -13,6 +13,18 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResp> userNotFoundException(UserNotFoundException ex, WebRequest webRequest){
+        ErrorResp errDetail = ErrorResp.builder()
+                .path(webRequest.getDescription(false))
+                .timestamp(LocalDateTime.now())
+                .errorCode("USER_NOT_FOUND")
+                .message(ex.getMessage())
+                .build();
+
+        return new ResponseEntity<>(errDetail, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(TaskNotFoundException.class)
     public ResponseEntity<ErrorResp> userNotFoundException(TaskNotFoundException ex, WebRequest webRequest){
         ErrorResp errDetail = ErrorResp.builder()
