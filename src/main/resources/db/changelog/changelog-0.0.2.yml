@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: 20230612-01
+      id: 20230612-02
       author: Orkhan
       changes:
         - createTable:
-            tableName: tasks
+            tableName: organization
             columns:
               - column:
                   name: id
@@ -14,30 +14,12 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: title
-                  type: text
-              - column:
-                  name: description
-                  type: text
-              - column:
-                  name: status
-                  type: varchar(16)
-              - column:
-                  name: created_at
-                  type: timestamp
-                  defaultValue: now()
-              - column:
-                  name: expired_at
-                  type: timestamp
-            constraints:
-              - foreignKey:
-                  baseColumnNames: organization_id
-                  baseTableName: tasks
-                  referencedColumnNames: id
-                  referencedTableName: organizations
+                  name: name
+                  type: varchar(32)
 
 
 
 
 
-            remarks: Tasks table
+
+            remarks: Organizations table

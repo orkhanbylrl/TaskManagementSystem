@@ -1,10 +1,13 @@
 package App.service.impl;
 
+import App.dao.entity.Organization;
 import App.dao.entity.Task;
+import App.dao.repository.OrganizationRepository;
 import App.dao.repository.TaskRepository;
 import App.mapper.TaskMapper;
 import App.model.dto.TaskResp;
 import App.model.dto.TaskRq;
+import App.model.exception.OrganizationNotFoundException;
 import App.model.exception.TaskNotFoundException;
 import App.service.TaskService;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +23,16 @@ import java.util.List;
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository repo;
+    private final OrganizationRepository organizationRepo;
 
     @Override
     public TaskResp save(TaskRq taskRq) {
         log.info("saving task");
+        Long organizationId = taskRq.getOrganizationId();
+        Organization organization = organizationRepo.findById(organizationId)
+                .orElseThrow(() -> new OrganizationNotFoundException("Organization is not exist!"));
         Task task = TaskMapper.MAPPER.mapToTask(taskRq);
+        task.setOrganization(organization);
         return TaskMapper.MAPPER.mapToTaskResp(repo.save(task));
     }
 
@@ -48,15 +56,17 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskResp update(Long id, TaskRq taskRq) {
         Task task = repo.findById(id).orElseThrow(() -> new TaskNotFoundException("Task is not found!"));
+
         Task updatedTask = Task.builder()
                 .id(task.getId())
-                .title(task.getTitle())
-                .description(task.getDescription())
-                .status(task.getStatus())
+                .title(taskRq.getTitle())
+                .description(taskRq.getDescription())
+                .status(taskRq.getStatus())
                 .createdAt(task.getCreatedAt())
-                .expiredAt(task.getExpiredAt())
+                .expiredAt(taskRq.getExpiredAt())
                 .organization(task.getOrganization())
                 .build();
+
 
         return TaskMapper.MAPPER.mapToTaskResp(repo.save(updatedTask));
     }

@@ -8,7 +8,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-07-02T14:06:20+0400",
+    date = "2023-07-02T15:32:55+0400",
     comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.6.1.jar, environment: Java 17.0.7 (Amazon.com Inc.)"
 )
 public class TaskMapperImpl implements TaskMapper {
@@ -19,16 +19,16 @@ public class TaskMapperImpl implements TaskMapper {
             return null;
         }
 
-        Task task = new Task();
+        Task.TaskBuilder task = Task.builder();
 
-        task.setTitle( taskRq.getTitle() );
-        task.setDescription( taskRq.getDescription() );
+        task.title( taskRq.getTitle() );
+        task.description( taskRq.getDescription() );
         if ( taskRq.getStatus() != null ) {
-            task.setStatus( Enum.valueOf( Status.class, taskRq.getStatus() ) );
+            task.status( Enum.valueOf( Status.class, taskRq.getStatus() ) );
         }
-        task.setExpiredAt( taskRq.getExpiredAt() );
+        task.expiredAt( taskRq.getExpiredAt() );
 
-        return task;
+        return task.build();
     }
 
     @Override
@@ -47,6 +47,7 @@ public class TaskMapperImpl implements TaskMapper {
         }
         taskResp.createdAt( task.getCreatedAt() );
         taskResp.expiredAt( task.getExpiredAt() );
+        taskResp.organization( task.getOrganization() );
 
         return taskResp.build();
     }
