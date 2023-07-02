@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -35,6 +36,17 @@ public class TaskController {
     @ResponseStatus(HttpStatus.OK)
     public List<TaskResp> getAll() {
         return taskService.getAll();
+    }
+
+    @GetMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
+    public List<TaskResp> searchTasks(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false) LocalDateTime expiredBefore
+    ) {
+        return taskService.searchTasks(status, title, description, expiredBefore);
     }
 
     @PutMapping("/id/{id}")

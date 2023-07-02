@@ -1,6 +1,7 @@
 package App.service.impl;
 
 import App.dao.entity.Organization;
+import App.dao.entity.Status;
 import App.dao.entity.Task;
 import App.dao.repository.OrganizationRepository;
 import App.dao.repository.TaskRepository;
@@ -10,10 +11,13 @@ import App.model.dto.TaskRq;
 import App.model.exception.OrganizationNotFoundException;
 import App.model.exception.TaskNotFoundException;
 import App.service.TaskService;
+import App.specification.TaskSpecifications;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -70,4 +74,29 @@ public class TaskServiceImpl implements TaskService {
 
         return TaskMapper.MAPPER.mapToTaskResp(repo.save(updatedTask));
     }
+
+    @Override
+    public List<TaskResp> searchTasks(String status, String title, String description, LocalDateTime expiredBefore) {
+        Specification<Task> spec = Specification.where(null);
+
+        if (status != null) {
+            spec = spec.and(TaskSpecifications.withStatus(Status.valueOf(status.toUpperCase())));
+        }
+
+        if (title != null) {
+            spec = spec.and(TaskSpecifications.withTitle(title));
+        }
+
+        if (description != null) {
+            spec = spec.and(TaskSpecifications.withDescription(description));
+        }
+
+        if (expiredBefore != null) {
+            spec = spec.and(TaskSpecifications.expiredBefore(expiredBefore));
+        }
+
+        return repo.findAll(spec).stream().map(TaskMapper.MAPPER::mapToTaskResp).toList();
+    }
+
+
 }
