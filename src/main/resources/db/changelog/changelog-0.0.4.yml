@@ -14,7 +14,7 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: fullname
+                  name: full_name
                   type: varchar(32)
               - column:
                   name: email

@@ -5,12 +5,16 @@ import App.dao.repository.UserRepository;
 import App.mapper.UserMapper;
 import App.model.dto.UserRegDTO;
 import App.model.dto.UserResp;
+import App.model.dto.UserRq;
 import App.model.exception.UserNotFoundException;
+import App.service.JwtService;
 import App.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,8 +26,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository repo;
 
     @Override
-    public UserResp save(UserRegDTO userRegDTO) {
-        User user = UserMapper.MAPPER.mapToUser(userRegDTO);
+    public UserResp save(User user) {
         return UserMapper.MAPPER.mapToUserResp(repo.save(user));
     }
 
@@ -38,4 +41,5 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Optional<User> user = repo.findUsersByEmail(email);
         return user.map(UserDetailsImpl::new).orElseThrow(() -> new UserNotFoundException("User is not exist!"));
     }
+
 }
