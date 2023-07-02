@@ -8,18 +8,21 @@ import App.model.dto.OrganizationRq;
 import App.model.exception.OrganizationNotFoundException;
 import App.service.OrganizationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrganizationServiceImpl implements OrganizationService {
 
     private final OrganizationRepository repo;
 
     @Override
     public OrganizationResp save(OrganizationRq rq) {
+        log.info("saving organization");
         Organization organization = OrganizationMapper.MAPPER.mapToOrg(rq);
         return OrganizationMapper.MAPPER.mapToOrgResp(repo.save(organization));
     }
