@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20230612-05
+      author: Orkhan
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: fullname
+                  type: varchar(32)
+              - column:
+                  name: email
+                  type: varchar(32)
+              - column:
+                  name: password
+                  type: text
+
+
+            remarks: Users table
